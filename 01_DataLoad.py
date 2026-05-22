@@ -282,8 +282,6 @@ def build_momentum_signals(ret_wide: pd.DataFrame, universe_df: pd.DataFrame) ->
     mom     = np.expm1(mom_log)
 
     if VOL_SCALE_SIGNAL:
-        # Dividing by realised vol puts the signal in return/vol units, which normalises
-        # cross-sectional dispersion and reduces the influence of high-volatility names.
         vol_daily   = ret_wins.rolling(252, min_periods=126).std() * np.sqrt(252)
         vol_monthly = vol_daily.reindex(mom.index, method="ffill")
         mom         = mom / vol_monthly.clip(lower=0.01)
